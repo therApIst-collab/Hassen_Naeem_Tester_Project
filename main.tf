@@ -7,31 +7,19 @@ variable "project_id" {
   default = "hassan-naeem-tester-project"
 }
 
-resource "google_project_service" "cloud_run" {
-  service = "run.googleapis.com"
-}
-resource "google_project_service" "secret_manager" {
-  service = "secretmanager.googleapis.com"
-}
-resource "google_project_service" "kms" {
-  service = "cloudkms.googleapis.com"
-}
-resource "google_project_service" "cloud_build" {
-  service = "cloudbuild.googleapis.com"
-}
-resource "google_project_service" "logging" {
-  service = "logging.googleapis.com"
-}
-resource "google_project_service" "monitoring" {
-  service = "monitoring.googleapis.com"
-}
-resource "google_project_service" "firestore" {
-  service = "firestore.googleapis.com"
-}
+resource "google_project_service" "cloud_run" { service = "run.googleapis.com" }
+resource "google_project_service" "secret_manager" { service = "secretmanager.googleapis.com" }
+resource "google_project_service" "kms" { service = "cloudkms.googleapis.com" }
+resource "google_project_service" "cloud_build" { service = "cloudbuild.googleapis.com" }
+resource "google_project_service" "logging" { service = "logging.googleapis.com" }
+resource "google_project_service" "monitoring" { service = "monitoring.googleapis.com" }
+resource "google_project_service" "firestore" { service = "firestore.googleapis.com" }
+
 resource "google_service_account" "devops" {
   account_id   = "svc-devops"
   display_name = "DevOps Service Account"
 }
+
 resource "google_kms_key_ring" "therapist" {
   name     = "therapist-keys"
   location = "us-central1"
@@ -74,4 +62,10 @@ resource "google_secret_manager_secret" "db_uri" {
 resource "google_secret_manager_secret_version" "db_uri_version" {
   secret      = google_secret_manager_secret.db_uri.id
   secret_data = "your-db-uri-here"
+}
+
+resource "google_project_iam_member" "devops_secret_access" {
+  project = var.project_id
+  role    = "roles/secretmanager.secretAccessor"
+  member  = "serviceAccount:${google_service_account.devops.email}"
 }
