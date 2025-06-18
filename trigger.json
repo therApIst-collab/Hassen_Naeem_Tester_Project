@@ -1,0 +1,35 @@
+{
+  "name": "api-deploy",
+  "github": {
+    "owner": "Hassan-Naeem-code",
+    "name": "Hassen_Naeem_Tester_Project",
+    "push": {
+      "branch": "main"
+    }
+  },
+  "build": {
+    "steps": [
+      {
+        "name": "gcr.io/cloud-builders/docker",
+        "args": ["build", "-t", "gcr.io/$PROJECT_ID/dev-api", "./api"]
+      },
+      {
+        "name": "gcr.io/cloud-builders/docker",
+        "args": ["push", "gcr.io/$PROJECT_ID/dev-api"]
+      },
+      {
+        "name": "gcr.io/google.com/cloudsdktool/cloud-sdk",
+        "entrypoint": "gcloud",
+        "args": [
+          "run", "deploy", "dev-api",
+          "--image", "gcr.io/$PROJECT_ID/dev-api",
+          "--region", "us-central1",
+          "--platform", "managed",
+          "--allow-unauthenticated"
+        ]
+      }
+    ]
+  },
+  "serviceAccount": "svc-devops@hassan-naeem-tester-project.iam.gserviceaccount.com",
+  "logBucket": "gs://tester-gcp-log-bucket"
+}
