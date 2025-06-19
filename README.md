@@ -19,8 +19,8 @@ This project demonstrates a HIPAA-ready cloud setup on Google Cloud Platform (GC
 
 ### 1. **Clone the Repository**
 ```sh
-git clone https://github.com/<your-org-or-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/therApIst-collab/Hassen_Naeem_Tester_Project
+cd Hassen_Naeem_Tester_Project
 ```
 
 ---
